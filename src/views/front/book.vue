@@ -207,6 +207,7 @@ export default {
         type: 'info'
       }).then(() => {
         update(row.book_id, this.id).then(res => {
+          localStorage.setItem('book_id', row.book_id)
           showNotify(res.data)
           if (row.room_id !== null) {
             changeStatusBook(row.room_id)

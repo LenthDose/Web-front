@@ -398,6 +398,8 @@ export default {
             deleteById(this.book_id)
           })
         }
+        this.room_id = ''
+        localStorage.remove('book_id', '')
       }
     }
   },
@@ -423,8 +425,12 @@ export default {
     },
     getBook() {
       getBookByUser(this.user_id).then(res => {
-        this.room_id = res.data.room_id
-        this.book_id = res.data.book_id
+        let book = {}
+        this.book_id = localStorage.getItem('book_id')
+        book = res.data.find((item) => {
+          return item.book_id === this.book_id
+        })
+        this.room_id = book.room_id
       }).catch(() => {})
     },
     getList() {
@@ -492,7 +498,7 @@ export default {
     },
     onSubmit() {
       if (validPhone(this.book.book_phone)) {
-        add(this.book).then(() => {
+        add(this.book).then((res) => {
           this.loading = true
           this.keep = setInterval(() => { this.getBook() }, 4000)
         }).catch(() => {
